@@ -1,4 +1,6 @@
 // client/app/(main)/page.jsx
+"use client"; // <-- ADD THIS DIRECTIVE
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
