@@ -1,8 +1,6 @@
 // client/components/common/Header.jsx
-
 import React from 'react';
-// FIX: Change import from 'next/router' (Pages Router) to 'next/navigation' (App Router)
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation'; // FIX: Changed import from 'next/router' to 'next/navigation' for App Router
 import Link from 'next/link';
 import { LogOut, User } from 'lucide-react';
 import { useResume } from '../../context/ResumeContext';

@@ -21,6 +21,8 @@ export const ResumeProvider = ({ children }) => {
   const [resume, setResume] = useState(INITIAL_RESUME_DATA);
   const [currentStep, setCurrentStep] = useState(0);
   const [allResumes, setAllResumes] = useState([]);
+  // FIX: Added Scale State - default to 0.7 as per existing hardcode
+  const [scale, setScale] = useState(0.7); 
 
   // --- Auth and Initialization Effect ---
   useEffect(() => {
@@ -136,6 +138,18 @@ export const ResumeProvider = ({ children }) => {
     });
   }, []);
 
+  // FIX: Function to update the scale factor
+  const updateScale = useCallback((newScale) => {
+    // Ensure newScale is a number and within reasonable bounds (0.25 to 1.0)
+    const numericScale = parseFloat(newScale);
+    if (!isNaN(numericScale) && numericScale >= 0.25 && numericScale <= 1.0) {
+      setScale(numericScale);
+    } else if (isNaN(numericScale)) {
+      console.error("Invalid scale value provided.");
+    }
+  }, []);
+
+
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     user,
@@ -157,10 +171,15 @@ export const ResumeProvider = ({ children }) => {
     FORM_STEPS,
     nextStep,
     prevStep,
+    
+    // FIX: Expose scale and updateScale
+    scale,
+    updateScale,
   }), [
     user, isAuthenticated, authLoading, handleLogin, handleLogout,
     resume, allResumes, saveOrUpdateResume, deleteResume, fetchAllResumes,
-    currentStep, nextStep, prevStep, updateResumeData
+    currentStep, nextStep, prevStep, updateResumeData,
+    scale, updateScale
   ]);
 
   return (

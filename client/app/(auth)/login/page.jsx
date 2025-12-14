@@ -8,6 +8,7 @@ import { loginUser } from '../../../services/authService';
 import Input from '../../../components/common/Input';
 import Button from '../../../components/common/Button';
 import toast from 'react-hot-toast';
+import { User } from 'lucide-react'; // FIX: Added missing import for User icon
 
 /**
  * @file login/page.jsx

@@ -4,13 +4,16 @@ import { Brain, Loader2, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SuggestionCard from './SuggestionCard';
 import { useAISuggestions } from '../../hooks/useAISuggestions'; 
-import { useResumeData } from '../../hooks/useResumeData'; 
+// REMOVED: import { useResumeData } from '../../hooks/useResumeData'; // CONFLICTING IMPORT
 import toast from 'react-hot-toast';
+import Button from '../common/Button'; 
 
 /**
  * @file AISuggestions.jsx
  * @description Panel to display AI suggestions, used in the right sidebar.
  */
+// REMOVED: export const useResumeData = () => {}; // CONFLICTING EXPORT
+
 const AISuggestant = ({ section, content, applySuggestion }) => {
     
   // Assuming a parent component or form is managing the specific section/content/apply function
