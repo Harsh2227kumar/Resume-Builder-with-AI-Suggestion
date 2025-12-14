@@ -7,11 +7,15 @@ import config from './config.js';
  */
 const connectDB = async () => {
   try {
+    // Recommended setting for Mongoose
+    mongoose.set('strictQuery', true); 
+    
     const conn = await mongoose.connect(config.mongoUri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error connecting to MongoDB: ${error.message}`);
-    process.exit(1);
+    // Do not exit here; let server.js handle the graceful exit after failing to connect
+    throw error; 
   }
 };
 

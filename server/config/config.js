@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-// Load .env from the server directory (process.cwd() is the server folder when running)
+// Load .env from current working directory (server folder)
 dotenv.config();
 
 /**
@@ -12,5 +12,6 @@ export default {
   mongoUri: process.env.MONGO_URI,
   jwtSecret: process.env.JWT_SECRET,
   openAiApiKey: process.env.OPENAI_API_KEY,
-  nodeEnv: process.env.NODE_ENV,
+  geminiApiKey: process.env.GEMINI_API_KEY, 
+  nodeEnv: process.env.NODE_ENV || 'development', 
 };

@@ -4,23 +4,23 @@ const { Schema } = mongoose;
 
 // Sub-schema for Experience items
 const experienceSchema = new Schema({
-  title: { type: String, required: true },
-  company: { type: String, required: true },
+  title: { type: String, required: true, trim: true },
+  company: { type: String, required: true, trim: true },
   startDate: { type: Date, required: true },
-  endDate: { type: Date }, // Nullable for current job
-  location: { type: String },
-  responsibilities: [{ type: String }],
-});
+  endDate: { type: Date }, 
+  location: { type: String, trim: true },
+  responsibilities: [{ type: String, trim: true }],
+}, { _id: false }); // No need for separate IDs on sub-documents
 
 // Sub-schema for Education items
 const educationSchema = new Schema({
-  institution: { type: String, required: true },
-  degree: { type: String, required: true },
-  fieldOfStudy: { type: String },
+  institution: { type: String, required: true, trim: true },
+  degree: { type: String, required: true, trim: true },
+  fieldOfStudy: { type: String, trim: true },
   startDate: { type: Date },
   endDate: { type: Date },
-  gpa: { type: String },
-});
+  gpa: { type: String, trim: true },
+}, { _id: false });
 
 const resumeSchema = new Schema(
   {
@@ -29,38 +29,41 @@ const resumeSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
+      index: true, // Index for faster lookup by user
     },
     title: {
       type: String,
       required: true,
-      default: 'My New Resume',
+      trim: true,
+      default: 'My Professional Resume',
     },
     personalInfo: {
-      fullName: { type: String },
-      email: { type: String },
-      phone: { type: String },
-      linkedin: { type: String },
-      portfolio: { type: String },
+      fullName: { type: String, trim: true },
+      email: { type: String, trim: true, lowercase: true },
+      phone: { type: String, trim: true },
+      linkedin: { type: String, trim: true },
+      portfolio: { type: String, trim: true },
     },
-    summary: { type: String },
+    summary: { type: String, trim: true },
     experience: [experienceSchema],
     education: [educationSchema],
-    skills: [{ type: String }],
+    skills: [{ type: String, trim: true }],
     projects: [
       {
-        name: { type: String },
-        description: { type: String },
-        technologies: [{ type: String }],
-        link: { type: String },
+        name: { type: String, trim: true },
+        description: { type: String, trim: true },
+        technologies: [{ type: String, trim: true }],
+        link: { type: String, trim: true },
       },
     ],
     template: {
       type: String,
-      default: 'Classic', // e.g., 'Classic', 'Modern', 'Minimal'
+      default: 'Classic', 
+      enum: ['Classic', 'Modern', 'Minimal'] // Enforce template type
     },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt timestamps
+    timestamps: true, 
   }
 );
 

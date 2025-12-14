@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import asyncHandler from 'express-async-handler'; // Used for simplified async error handling
+import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 import config from '../config/config.js';
 
@@ -10,13 +10,11 @@ import config from '../config/config.js';
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  // Check for 'Bearer' token in the Authorization header
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     try {
-      // Extract the token (remove 'Bearer ')
       token = req.headers.authorization.split(' ')[1];
 
       // Verify token
@@ -27,15 +25,19 @@ const protect = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
-      console.error(error);
-      res.status(401);
+      console.error('Token verification failed:', error.message);
+      // Throw error to be caught by express-async-handler and errorHandler
+      // Set statusCode on error object for errorHandler
+      error.statusCode = 401; 
       throw new Error('Not authorized, token failed');
     }
   }
 
   if (!token) {
-    res.status(401);
-    throw new Error('Not authorized, no token');
+    // Throw error to be caught by express-async-handler and errorHandler
+    const error = new Error('Not authorized, no token');
+    error.statusCode = 401;
+    throw error;
   }
 });
 

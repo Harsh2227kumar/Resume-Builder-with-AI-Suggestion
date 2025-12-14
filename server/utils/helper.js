@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
 
 /**
- * @file helpers.js
+ * @file helper.js
  * @description Utility functions, including JWT generation.
  */
 

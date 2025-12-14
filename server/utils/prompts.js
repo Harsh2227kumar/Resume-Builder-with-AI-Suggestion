@@ -1,10 +1,10 @@
 /**
  * @file prompts.js
- * @description Contains structured prompt templates for the OpenAI service.
+ * @description Contains structured prompt templates for the Gemini service.
  */
 
 // Base instruction to set the context for the AI model
-const baseInstruction = "You are an expert resume analyst and career coach. Your task is to provide constructive, professional, and concise suggestions to improve the user's resume content. Respond only with an array of suggestion objects.";
+const baseInstruction = "You are an expert resume analyst and career coach. Your task is to provide constructive, professional, and concise suggestions to improve the user's resume content.";
 
 /**
  * Generates the prompt for suggesting improvements to the experience section.
@@ -19,15 +19,15 @@ export const generateExperiencePrompt = (experienceText) => {
   ${experienceText}
   ---
   
-  Provide 3-5 distinct suggestions in the following JSON format:
+  Provide 3-5 distinct suggestions. Your entire response MUST be a valid JSON object containing a top-level key named "suggestions". Example format:
   {
     "suggestions": [
-      { "type": "bullet_improvement", "target": "Experience", "suggestion": "Rewrite 'Managed a team' to 'Led a 5-person team, resulting in X% efficiency gain'." }
+      { "type": "bullet_improvement", "target": "Experience", "suggestion": "Rewrite 'Managed a team' to 'Led a 5-person team, resulting in 20% efficiency gain'." }
     ]
   }`;
 };
 
-// Add more prompt templates as needed (e.g., for Skills, Summary)
+// Prompt for Summary Section
 export const generateSummaryPrompt = (summaryText) => {
   return `${baseInstruction} Review the following professional summary. Focus on: 1) Clarity and conciseness, 2) Targeting the job goal, and 3) Highlighting key accomplishments.
   
@@ -36,10 +36,10 @@ export const generateSummaryPrompt = (summaryText) => {
   ${summaryText}
   ---
   
-  Provide 3-5 distinct suggestions in the following JSON format:
+  Provide 3-5 distinct suggestions. Your entire response MUST be a valid JSON object containing a top-level key named "suggestions". Example format:
   {
     "suggestions": [
-      { "type": "improvement", "target": "Summary", "suggestion": "Your specific improvement suggestion here." }
+      { "type": "summary_improvement", "target": "Summary", "suggestion": "Your specific improvement suggestion here." }
     ]
   }`;
 };

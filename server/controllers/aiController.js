@@ -1,6 +1,14 @@
 import asyncHandler from 'express-async-handler';
-import { getAISuggestions } from '../services/openaiServices.js';
+// FIX: Changed import path and name to the new Gemini service
+import { getGeminiSuggestions } from '../services/geminiService.js'; 
 import { generateExperiencePrompt, generateSummaryPrompt } from '../utils/prompts.js';
+
+// Utility function to set status on error
+const setStatusAndThrow = (message, status) => {
+    const error = new Error(message);
+    error.statusCode = status;
+    throw error;
+};
 
 /**
  * @file aiController.js
@@ -12,14 +20,12 @@ import { generateExperiencePrompt, generateSummaryPrompt } from '../utils/prompt
 const getSuggestions = asyncHandler(async (req, res) => {
   const { section, content } = req.body;
 
-  if (!section || !content) {
-    res.status(400);
-    throw new Error('Missing required fields: section and content.');
+  if (!section || !content) { 
+    setStatusAndThrow('Missing required fields: section and content.', 400);
   }
 
   let prompt;
   
-  // Select the appropriate prompt template based on the section
   switch (section.toLowerCase()) {
     case 'experience':
       prompt = generateExperiencePrompt(content);
@@ -27,14 +33,12 @@ const getSuggestions = asyncHandler(async (req, res) => {
     case 'summary':
       prompt = generateSummaryPrompt(content);
       break;
-    // Add other sections (skills, education) here
     default:
-      res.status(400);
-      throw new Error(`Unsupported section for AI suggestion: ${section}`);
+      setStatusAndThrow(`Unsupported section for AI suggestion: ${section}`, 400);
   }
 
-  // Fetch suggestions from the OpenAI service
-  const suggestions = await getAISuggestions(prompt);
+  // CHANGED: Call the new Gemini service function
+  const suggestions = await getGeminiSuggestions(prompt);
   
   res.json({
     section,

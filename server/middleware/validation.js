@@ -7,20 +7,21 @@ import { check, validationResult } from 'express-validator';
 
 // Central function to process validation checks and handle errors
 const validate = (req, res, next) => {
-  const errors = validationResult(req);
+  // Only collect the first error for each field for cleaner output
+  const errors = validationResult(req).formatWith(({ msg, param }) => ({
+    field: param,
+    message: msg
+  }));
+
   if (errors.isEmpty()) {
     return next();
   }
 
   // Format and send validation errors
-  const extractedErrors = errors.array().map(err => ({
-    [err.param]: err.msg,
-  }));
-
   res.status(400).json({
     success: false,
     message: 'Validation failed',
-    errors: extractedErrors,
+    errors: errors.array(),
   });
 };
 
@@ -28,15 +29,15 @@ const validate = (req, res, next) => {
 
 // Validation for User Registration
 export const validateRegistration = [
-  check('name', 'Name is required').notEmpty(),
-  check('email', 'Please include a valid email').isEmail(),
+  check('name', 'Name is required').trim().notEmpty(),
+  check('email', 'Please include a valid email').isEmail().normalizeEmail(),
   check('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
   validate, // Execute the validator function
 ];
 
 // Validation for User Login
 export const validateLogin = [
-  check('email', 'Please include a valid email').isEmail(),
+  check('email', 'Please include a valid email').isEmail().normalizeEmail(),
   check('password', 'Password is required').exists(),
   validate,
 ];

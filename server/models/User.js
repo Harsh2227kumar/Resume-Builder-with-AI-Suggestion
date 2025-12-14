@@ -33,17 +33,22 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
-
-  // Hash password
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+  try {
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    // Pass error to Mongoose/Express error handler
+    next(error); 
+  }
 });
 
 /**
  * Method to compare the provided password with the stored hashed password.
  */
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  // FIX: This function was already correct but ensuring the dependency is clear
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

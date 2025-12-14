@@ -7,6 +7,13 @@ import { generateToken } from '../utils/helper.js';
  * @description Controller logic for user registration and authentication.
  */
 
+// Utility function to set status on error
+const setStatusAndThrow = (message, status) => {
+    const error = new Error(message);
+    error.statusCode = status;
+    throw error;
+};
+
 // @route POST /api/auth/register
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
@@ -15,8 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
+    setStatusAndThrow('User already exists', 400); // FIX: Removed redundant res.status(400)
   }
 
   const user = await User.create({
@@ -33,8 +39,8 @@ const registerUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+    // This case should be rare if validation passed, but kept for robustness
+    setStatusAndThrow('Invalid user data', 400); 
   }
 });
 
@@ -53,8 +59,8 @@ const loginUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401);
-    throw new Error('Invalid email or password');
+    // Use 401 for login failure for security (don't distinguish between email/password error)
+    setStatusAndThrow('Invalid email or password', 401); 
   }
 });
 

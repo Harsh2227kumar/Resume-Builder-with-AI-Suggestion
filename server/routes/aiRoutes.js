@@ -9,7 +9,6 @@ import { validateAISuggestions } from '../middleware/validation.js';
  */
 const router = express.Router();
 
-// Apply protection and validation middleware
 router.post('/suggestions', protect, validateAISuggestions, getSuggestions);
 
 export default router;
