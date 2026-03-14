@@ -136,14 +136,18 @@ const ExperienceForm = () => {
 
     // Placeholder function for demonstration/fix completion
     const addJob = () => {
-        updateResumeData('experience', {
+        // FIX: Add a temporary client-side ID (_tempId) for stable keys
+        const newEntry = {
+            _tempId: Date.now() + Math.random(), 
             title: '',
             company: '',
             startDate: '',
             endDate: '',
             location: '',
             responsibilities: [''],
-        }, true, -1); // true to signal it's an array push
+        };
+        const updatedExperience = [...experience, newEntry];
+        updateResumeData('experience', updatedExperience);
     };
 
     // Placeholder function for demonstration/fix completion
@@ -169,7 +173,8 @@ const ExperienceForm = () => {
             <div className="space-y-6">
                 {experience.map((job, index) => (
                     <JobEntry 
-                        key={index}
+                        // FIX: Use a stable unique key (MongoDB _id or client-side _tempId)
+                        key={job._id || job._tempId || index}
                         job={job}
                         index={index}
                         updateExperience={updateJob}

@@ -86,14 +86,18 @@ const EducationForm = () => {
 
     // Logic to add a new empty education entry to the array
     const addEducation = () => {
-        updateResumeData('education', {
+        // FIX: Add a temporary client-side ID (_tempId) for stable keys
+        const newEntry = {
+            _tempId: Date.now() + Math.random(), 
             institution: '',
             degree: '',
             fieldOfStudy: '',
             startDate: '',
             endDate: '',
             gpa: '',
-        }, true, -1); // true signals an array push
+        };
+        const updatedEducation = [...education, newEntry];
+        updateResumeData('education', updatedEducation);
     };
 
     // Logic to update a specific education object at index
@@ -117,7 +121,8 @@ const EducationForm = () => {
             <div className="space-y-6">
                 {education.map((edu, index) => (
                     <EducationEntry 
-                        key={index}
+                        // FIX: Use a stable unique key (MongoDB _id or client-side _tempId)
+                        key={edu._id || edu._tempId || index} 
                         education={edu}
                         index={index}
                         updateEducation={updateEdu}

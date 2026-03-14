@@ -8,6 +8,7 @@ import { useResume } from '../../../context/ResumeContext';
 import Button from '../../../components/common/Button';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import ThumbnailPreview from '../../../components/Preview/ThumbnailPreview';
 
 /**
  * @file my-resumes/page.jsx
@@ -89,11 +90,8 @@ const MyResumesPage = () => {
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               
-              {/* Thumbnail (Placeholder for actual rendering) */}
-              <div className="h-40 bg-gray-100 flex items-center justify-center relative border-b">
-                <FileText size={32} className="text-gray-400" />
-                <span className="text-sm text-gray-500 absolute bottom-2">Thumbnail Preview</span>
-              </div>
+              {/* Thumbnail Preview */}
+              <ThumbnailPreview resumeData={resumeData} />
               
               <div className="p-6">
                 <h2 className="text-lg font-semibold mb-1 truncate">{resumeData.title}</h2>

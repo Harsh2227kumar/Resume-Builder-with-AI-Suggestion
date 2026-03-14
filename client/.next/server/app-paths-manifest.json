@@ -1,5 +1,6 @@
 {
   "/(main)/page": "app/(main)/page.js",
-  "/(main)/build/page": "app/(main)/build/page.js",
-  "/(main)/my-resumes/page": "app/(main)/my-resumes/page.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(main)/my-resumes/page": "app/(main)/my-resumes/page.js",
+  "/(main)/build/page": "app/(main)/build/page.js"
 }

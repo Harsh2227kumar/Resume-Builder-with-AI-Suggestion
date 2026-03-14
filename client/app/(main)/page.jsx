@@ -4,7 +4,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Brain, Eye, LayoutList, Download, Cloud, CheckCircle } from 'lucide-react';
+import { Brain, Eye, LayoutList, Download, Cloud, CheckCircle, Sparkles, ShieldCheck, Gauge } from 'lucide-react';
 import Button from '../../components/common/Button';
 
 // Features Section data (A. Landing Page, Features Section)
@@ -86,15 +86,28 @@ const HomePage = () => {
             </Link>
           </motion.div>
 
-          {/* Floating Resume Mockup (Placeholder for complex 3D tilt effect) */}
+          {/* Compact highlights row instead of large preview */}
           <motion.div
-            className="mt-16 w-full max-w-2xl mx-auto h-56 bg-white rounded-lg shadow-3xl border border-gray-200 flex items-center justify-center text-gray-400"
-            initial={{ y: 50, opacity: 0, rotateX: 10 }}
-            animate={{ y: 0, opacity: 1, rotateX: 0 }}
-            transition={{ duration: 1, delay: 0.6, type: "spring" }}
+            className="mt-16 w-full max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4"
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
           >
-            <LayoutList size={40} />
-            <span className="ml-4">Live Resume Preview Mockup</span>
+            {[ 
+              { icon: Sparkles, title: 'AI Suggestions', desc: 'Polished bullets in seconds.' },
+              { icon: ShieldCheck, title: 'ATS Friendly', desc: 'Clean, parseable layouts.' },
+              { icon: Gauge, title: 'Fast Export', desc: 'One-click PDF downloads.' },
+            ].map((item, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-white shadow-lg border border-gray-100 flex items-start space-x-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
+                  <item.icon size={22} />
+                </div>
+                <div>
+                  <h4 className="text-base font-semibold text-text-primary">{item.title}</h4>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </motion.div>
         </div>
       </section>

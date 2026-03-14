@@ -1,5 +1,5 @@
 // client/components/ResumeBuilder/ProjectsForm.jsx
-import React, { useState, useEffect } from 'react'; // FIX: Import useState, useEffect
+import React, { useState, useEffect } from 'react';
 import Input from '../common/Input';
 import { useResume } from '../../context/ResumeContext';
 import Button from '../common/Button';
@@ -13,11 +13,11 @@ import { Plus } from 'lucide-react';
 // Placeholder Project Entry component (simplified)
 const ProjectEntry = ({ project, index, updateProject, removeProject }) => {
     
-    // FIX 1: Local state for comma-separated technologies string
+    // Local state for comma-separated technologies string
     const initialTechs = project.technologies.join(', ');
     const [localTechs, setLocalTechs] = useState(initialTechs);
 
-    // FIX 2: Synchronize local state when the project prop changes (e.g., loading new data)
+    // Synchronize local state when the project prop changes (e.g., loading new data)
     useEffect(() => {
         setLocalTechs(project.technologies.join(', '));
     }, [project.technologies]);
@@ -33,7 +33,7 @@ const ProjectEntry = ({ project, index, updateProject, removeProject }) => {
         }
     };
     
-    // FIX 3: Handler to parse and push technologies array to parent state on blur
+    // Handler to parse and push technologies array to parent state on blur
     const handleTechsBlur = () => {
         const newTechArray = localTechs.split(',').map(t => t.trim()).filter(t => t.length > 0);
         
@@ -51,7 +51,7 @@ const ProjectEntry = ({ project, index, updateProject, removeProject }) => {
             <Input label="Project Name" name="name" value={project.name} onChange={handleChange} required />
             <Input label="Project Link (URL)" name="link" value={project.link} onChange={handleChange} />
             
-            {/* FIX 4: Apply local state control and blur event to the technologies input */}
+            {/* Apply local state control and blur event to the technologies input */}
             <Input 
                 label="Technologies Used (Comma-Separated)" 
                 name="technologies" 
@@ -83,12 +83,16 @@ const ProjectsForm = () => {
 
     // Logic to add a new empty project entry
     const addProject = () => {
-        updateResumeData('projects', {
+        // FIX: Add a temporary client-side ID (_tempId) for stable keys
+        const newEntry = {
+            _tempId: Date.now() + Math.random(), 
             name: '',
             description: '',
             technologies: [],
             link: '',
-        }, true, -1);
+        };
+        const updatedProjects = [...projects, newEntry];
+        updateResumeData('projects', updatedProjects);
     };
 
     // Logic to update a specific project object at index
@@ -124,7 +128,8 @@ const ProjectsForm = () => {
             <div className="space-y-6">
                 {projects.map((proj, index) => (
                     <ProjectEntry 
-                        key={index}
+                        // FIX: Use a stable unique key (MongoDB _id or client-side _tempId)
+                        key={proj._id || proj._tempId || index}
                         project={proj}
                         index={index}
                         updateProject={updateProj}

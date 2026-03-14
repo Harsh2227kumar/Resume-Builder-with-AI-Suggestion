@@ -79,9 +79,16 @@ const ResumePreview = () => {
       </div>
 
       {/* Live Resume Rendering Area (C. Resume Builder Interface) */}
-      <div className="w-full aspect-[8.5/11] mx-auto shadow-2xl rounded-lg overflow-hidden border border-gray-300 bg-white">
+      <div className="w-full shadow-2xl rounded-lg overflow-hidden border border-gray-300 bg-white" style={{ aspectRatio: '8.5/11' }}>
         {/* FIX: Use dynamic scale state and calculated inverse scale */}
-        <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left', width: `${inverseScale * 100}%` }}>
+        <div style={{ 
+          transform: `scale(${scale})`, 
+          transformOrigin: 'top center',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
             <TemplateComponent ref={componentRef} resumeData={resume} />
         </div>
       </div>
