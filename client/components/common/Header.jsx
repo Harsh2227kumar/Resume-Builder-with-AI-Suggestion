@@ -1,6 +1,6 @@
 // client/components/common/Header.jsx
 import React from 'react';
-import { useRouter } from 'next/router'; // Use next/navigation for App Router
+import { useRouter } from 'next/navigation'; // FIX: Changed import from 'next/router' to 'next/navigation' for App Router
 import Link from 'next/link';
 import { LogOut, User } from 'lucide-react';
 import { useResume } from '../../context/ResumeContext';
@@ -24,20 +24,20 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
         
         {/* Logo and App Name */}
-        <Link href="/" className="text-2xl font-bold tracking-tight text-primary flex items-center space-x-2">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Subtle gradient shape for logo */}
-            <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2z" fill="url(#violet-gradient)" />
-            <path d="M15 15l-3-3l3-3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M9 15l3-3l-3-3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <defs>
-              <linearGradient id="violet-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{stopColor: '#8b5cf6', stopOpacity: 1}} />
-                <stop offset="100%" style={{stopColor: '#3b82f6', stopOpacity: 1}} />
-              </linearGradient>
-            </defs>
-          </svg>
-          <span className="hidden sm:inline">Smart Resume</span>
+        <Link href="/" className="flex items-center space-x-3 group">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 4h9l5 5v11H5z" fill="white" fillOpacity="0.08" />
+              <path d="M14 4v5h5" />
+              <path d="M8 13h8" />
+              <path d="M8 17h5" />
+              <path d="M8 9h3" />
+            </svg>
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="text-lg sm:text-xl font-semibold text-text-primary group-hover:text-primary transition">Smart Resume</span>
+            <span className="hidden sm:block text-xs text-gray-500">AI Resume Builder</span>
+          </div>
         </Link>
         
         {/* Navigation and Auth Actions */}

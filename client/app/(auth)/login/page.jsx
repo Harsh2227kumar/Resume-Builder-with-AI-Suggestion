@@ -8,6 +8,7 @@ import { loginUser } from '../../../services/authService';
 import Input from '../../../components/common/Input';
 import Button from '../../../components/common/Button';
 import toast from 'react-hot-toast';
+import { User } from 'lucide-react'; // FIX: Added missing import for User icon
 
 /**
  * @file login/page.jsx
@@ -107,15 +108,15 @@ const LoginPage = () => {
       </div>
       
       {/* Right Panel: Gradient + Testimonial (B. Authentication Pages) */}
-      <div className="hidden lg:block lg:w-1/2 h-full bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 h-[70vh] bg-gradient-to-br from-primary to-secondary relative overflow-hidden rounded-3xl shadow-2xl mx-6 my-8">
         <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(circle at 100% 0%, #ffffff, transparent 50%)' }} />
         {/* Placeholder for Testimonial/Animation */}
-        <div className="flex flex-col justify-center items-center h-full p-16 text-white text-center">
-            <User size={64} className="mb-4" />
-            <blockquote className="text-2xl font-light italic mb-4">
-                "The AI suggestions were game-changing. I landed interviews immediately after optimizing my resume."
+        <div className="flex flex-col justify-center items-center w-full p-12 text-white text-center space-y-4">
+            <User size={56} className="mb-2" />
+            <blockquote className="text-xl font-light italic">
+              "Two days after using the AI suggestions, I shipped an updated resume and booked 3 interviews."
             </blockquote>
-            <cite className="text-lg font-semibold">- Jane Doe, Senior Developer</cite>
+            <cite className="text-base font-semibold">— Priya N., Senior Frontend Engineer @ GrowthWorks</cite>
         </div>
       </div>
     </div>

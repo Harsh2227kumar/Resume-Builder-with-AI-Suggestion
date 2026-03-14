@@ -1,5 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
+
 import config from './config/config.js';
 import connectDB from './config/database.js';
 import errorHandler from './middleware/errorHandler.js';
@@ -14,30 +18,50 @@ import aiRoutes from './routes/aiRoutes.js';
  * @description Main entry point for the Express server application.
  */
 
-// 1. Initialize Express App and DB Connection
-connectDB();
 const app = express();
 
-// 2. Core Middleware
-app.use(cors()); // Allow cross-origin requests from the client
-app.use(express.json()); // Body parser for application/json
+// Security Middleware (Helmet, CORS, Mongo Sanitize)
+app.use(helmet());
+app.use(cors({ origin: '*', credentials: true })); 
+app.use(express.json({ limit: '10kb' })); 
+app.use(mongoSanitize()); 
 
-// 3. Simple Root Route for Health Check
+// Rate Limiting to prevent brute-force attacks on public routes
+const limiter = rateLimit({
+  max: 100, 
+  windowMs: 60 * 60 * 1000, 
+  message: 'Too many requests from this IP, please try again after an hour',
+});
+app.use('/api', limiter); 
+
+// Simple Root Route for Health Check
 app.get('/', (req, res) => {
-  res.send('AI Resume Builder API is running...');
+  res.send('Smart Resume Builder API is running...');
 });
 
-// 4. Mount Routes
+// Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/ai', aiRoutes);
 
-// 5. Custom Error Handler Middleware (MUST be the last middleware)
+// Custom Error Handler Middleware (MUST be the last middleware)
 app.use(errorHandler);
 
-// 6. Start Server
-const PORT = config.port;
+// Function to start the server after DB connection
+const startServer = async () => {
+  try {
+    // 1. Wait for DB connection
+    await connectDB(); 
+    const PORT = config.port;
+    
+    // 2. Start server only if DB connection succeeds
+    app.listen(PORT, () => {
+      console.log(`Server running in ${config.nodeEnv} mode on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server due to DB error. Exiting.', error);
+    process.exit(1);
+  }
+};
 
-app.listen(PORT, () => {
-  console.log(`Server running in ${config.nodeEnv} mode on port ${PORT}`);
-});
+startServer();

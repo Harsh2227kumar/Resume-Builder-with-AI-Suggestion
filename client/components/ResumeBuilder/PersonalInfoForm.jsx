@@ -1,20 +1,21 @@
 // client/components/ResumeBuilder/PersonalInfoForm.jsx
 import React from 'react';
 import Input from '../common/Input';
-import { useResumeData } from '../../hooks/useResumeData';
+import { useResume } from '../../context/ResumeContext'; // FIX: Changed hook import
 
 /**
  * @file PersonalInfoForm.jsx
  * @description Form section for basic user contact information.
  */
 const PersonalInfoForm = () => {
-  const { resume, updatePersonalInfo } = useResumeData();
+  // FIX: Updated hook to useResume and destructured relevant parts
+  const { resume, updateResumeData } = useResume(); 
   const info = resume.personalInfo;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Special updatePersonalInfo handler to target the nested object
-    updatePersonalInfo(name, value);
+    // FIX: Updated update call to correctly target nested personalInfo object
+    updateResumeData('personalInfo', { [name]: value }, true);
   };
 
   return (

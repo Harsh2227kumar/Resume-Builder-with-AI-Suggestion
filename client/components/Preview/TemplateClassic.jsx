@@ -6,11 +6,30 @@ import { twMerge } from 'tailwind-merge';
  * @file TemplateClassic.jsx
  * @description Classic, clean resume template for printing and preview.
  */
+
+// FIX: Implemented date formatting utility
+const formatDate = (dateInput) => {
+  if (!dateInput) return '';
+  try {
+    const date = new Date(dateInput);
+    if (isNaN(date.getTime())) {
+      return dateInput; 
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  } catch (e) {
+    return dateInput; 
+  }
+};
+
+
 const TemplateClassic = React.forwardRef(({ resumeData, className = '' }, ref) => {
   const { personalInfo, summary, experience, education, skills, projects } = resumeData;
 
   const headerStyle = "text-xl font-bold border-b-2 border-gray-300 pb-1 mb-2 mt-4 uppercase tracking-wider text-text-primary";
   const contentStyle = "text-sm text-gray-700";
+
+  // For smaller scales (thumbnails), ensure text remains readable
+  const isSmallScale = className?.includes('text-xs');
 
   return (
     <div ref={ref} className={twMerge("resume-page-container w-full h-full bg-white p-8 font-sans", className)}>
@@ -18,6 +37,7 @@ const TemplateClassic = React.forwardRef(({ resumeData, className = '' }, ref) =
       {/* 1. Personal Info */}
       <header className="text-center mb-6">
         <h1 className="text-3xl font-extrabold text-text-primary mb-1">{personalInfo.fullName || 'Your Full Name'}</h1>
+        {isSmallScale && <div className="h-0.5"></div> /* Reduce spacing for small scales */}
         <div className="text-sm text-gray-600 flex justify-center space-x-3 flex-wrap">
           <span>{personalInfo.email}</span>
           <span className="hidden sm:inline">|</span>
@@ -43,7 +63,8 @@ const TemplateClassic = React.forwardRef(({ resumeData, className = '' }, ref) =
             <div key={index} className="mb-3">
               <div className="flex justify-between items-start">
                 <h3 className="text-base font-semibold">{job.title} at {job.company}</h3>
-                <span className="text-sm text-gray-600">{job.startDate} - {job.endDate || 'Present'}</span>
+                {/* FIX: Applied date formatting */}
+                <span className="text-sm text-gray-600">{formatDate(job.startDate)} - {job.endDate ? formatDate(job.endDate) : 'Present'}</span>
               </div>
               <p className="text-xs text-gray-500 mb-1">{job.location}</p>
               <ul className="list-disc ml-5 space-y-1">
@@ -64,7 +85,8 @@ const TemplateClassic = React.forwardRef(({ resumeData, className = '' }, ref) =
             <div key={index} className="mb-2">
               <div className="flex justify-between items-start">
                 <h3 className="text-base font-semibold">{edu.degree}, {edu.fieldOfStudy}</h3>
-                <span className="text-sm text-gray-600">{edu.startDate} - {edu.endDate}</span>
+                {/* FIX: Applied date formatting */}
+                <span className="text-sm text-gray-600">{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</span>
               </div>
               <p className="text-sm text-gray-700">{edu.institution}</p>
               {edu.gpa && <p className="text-xs text-gray-500">GPA: {edu.gpa}</p>}
